@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FÍSICA - Ondas Mecánicas y Acústica Fisiológica (Facultad de Cs. Médicas - UCCuyo)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- KaTeX para renderizado matemático de alta precisión -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathWhenReady()"></script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #f7f9f6;
+      color: #1e293b;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Paleta Institucional UCCuyo (Verde Oliva y Contrastes Biofísicos) */
+    .text-accent { color: #436600; }
+    .bg-accent { background-color: #436600; }
+    .bg-accent-hover:hover { background-color: #324d00; }
+    .bg-accent-light { background-color: #f1f6eb; }
+    .border-accent { border-color: #436600; }
+
+    .text-primary { color: #436600; }
+    .bg-primary { background-color: #436600; }
+    .bg-primary-dark { background-color: #324d00; }
+    .border-primary { border-color: #436600; }
+    
+    .focus-accent:focus {
+      border-color: #436600;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 102, 0, 0.2);
+    }
+    
+    input[type=range] {
+      accent-color: #436600;
+    }
+    .grid-bg {
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .badge-katex .katex {
+      font-size: 1.05em;
+    }
+    canvas {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-accent/20 text-gray-800">
+
+  <!-- Cabecera Institucional UCCuyo -->
+  <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 no-math">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+          FIS
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-gray-800 tracking-wide uppercase">FÍSICA MÉDICA Y BIOFÍSICA</h1>
+          <p class="text-xs text-gray-500 font-semibold">Curso de Ingreso a Medicina (Facultad de Cs. Médicas - UCCuyo)</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <!-- Botón Vademécum Teórico -->
+        <button onclick="openFormulasModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-book-bookmark text-accent"></i>
+          <span class="hidden sm:inline">Vademécum</span>
+        </button>
+        <!-- Botón Guía de Uso -->
+        <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:opacity-90 transition">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>Guía de Uso</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal con Barra Lateral -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+    
+    <!-- Menú de Navegación Lateral -->
+    <nav class="w-full lg:w-64 shrink-0 lg:shrink-0 flex flex-row lg:flex-col gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-200 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal sticky top-20 h-fit" id="navTabs">
+      <button onclick="switchTab('lab')" id="tab-btn-lab" data-tab="lab" class="nav-btn bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm flex items-center gap-2">
+        <i class="fa-solid fa-flask-vial"></i> <span>1. Laboratorio Dinámico</span>
+      </button>
+      <button onclick="switchTab('duality')" id="tab-btn-duality" data-tab="duality" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-chart-line"></i> <span>2. Dualidad $y(x)$ vs $y(t)$</span>
+      </button>
+      <button onclick="switchTab('dimensions')" id="tab-btn-dimensions" data-tab="dimensions" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-globe"></i> <span>3. Dimensiones 1D, 2D & 3D</span>
+      </button>
+      <button onclick="switchTab('biomedical')" id="tab-btn-biomedical" data-tab="biomedical" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-heart-pulse text-accent"></i> <span>4. Biofísica en Medicina</span>
+      </button>
+    </nav>
+
+    <!-- Área de Contenido Dinámico -->
+    <div class="flex-1 space-y-6 min-w-0">
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 1: LABORATORIO DINÁMICO (Transversales vs Longitudinales)           -->
+      <!-- ========================================================================= -->
+      <div id="view-lab" class="space-y-6">
+
+        <!-- Panel de Presets Clínicos y Controles Principales -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Presets Clínicos:</span>
+            <button onclick="setSimMode('transverse')" id="preset-trans" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-light text-accent border border-accent/20 transition">
+              〰️ Cuerda Tensada (Transversal)
+            </button>
+            <button onclick="setSimMode('longitudinal')" id="preset-long" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition">
+              |||||| Resorte / Gas (Longitudinal)
+            </button>
+            <button onclick="setScenario('arterial')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-700 transition">
+              ❤️ Pulso Arterial Aórtico
+            </button>
+            <button onclick="setScenario('tympanum')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 hover:text-amber-700 text-slate-700 transition">
+              👂 Oído & Membrana Timpánica
+            </button>
+          </div>
+
+          <!-- Botones de Control de Simulación -->
+          <div class="flex items-center gap-2">
+            <button id="btn-play-pause" onclick="togglePlayPause()" class="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-xs flex items-center gap-2 shadow-sm transition">
+              <svg id="icon-play" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+              <span id="label-play">Pausar (Space)</span>
+            </button>
+            <button onclick="stepSimulation()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center gap-1 transition" title="Avanzar un fotograma">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+              Paso
+            </button>
+            <button onclick="resetSimulation()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center gap-1 transition" title="Reiniciar">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Reiniciar
+            </button>
+          </div>
+        </div>
+
+        <!-- Banner Teórico Conceptual -->
+        <div class="bg-accent-light border border-accent/20 rounded-2xl p-4 text-xs sm:text-sm text-slate-700">
+          <div class="flex items-start gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-accent mt-1.5 shrink-0 animate-pulse"></span>
+            <div>
+              <strong class="text-accent text-sm block mb-0.5">Postulado Fundamental de la Cinemática Ondulatoria Mecánica</strong>
+              Una onda mecánica es una perturbación que se propaga por un medio deformable en equilibrio, transportando 
+              <strong class="text-slate-900">energía y cantidad de movimiento ($p$)</strong> 
+              <span class="text-accent font-bold underline decoration-accent/40">sin transporte neto de materia</span>. 
+              Observa la <strong class="text-rose-600">Partícula Testigo (roja)</strong>: únicamente oscila localmente respecto a su punto de equilibrio ($y=0$ en transversal, $x=0$ en longitudinal).
+            </div>
+          </div>
+        </div>
+
+        <!-- Layout Central: Canvas y Controles -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Columna Izquierda: Canvas del Simulador Principal (8 cols) -->
+          <div class="lg:col-span-8 space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col">
+              
+              <!-- Cabecera de Estado del Canvas -->
+              <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-accent animate-pulse"></span>
+                  <span id="hud-mode" class="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                    Onda Transversal en Cuerda Tensada
+                  </span>
+                </div>
+                <div class="flex items-center gap-3 text-xs text-slate-600 font-mono" id="hud-stats">
+                  v = 40.0 cm/s | λ = 20.0 cm | f = 2.00 Hz
+                </div>
+              </div>
+
+              <!-- Canvas Interactivo -->
+              <div class="relative w-full h-72 sm:h-80 bg-gradient-to-b from-slate-50 to-white grid-bg overflow-hidden">
+                <canvas id="simCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+
+                <div class="absolute bottom-2 left-3 right-3 pointer-events-none flex flex-wrap items-center justify-between bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-slate-200 text-[11px] text-slate-600 shadow-sm">
+                  <div class="flex items-center gap-3">
+                    <span class="flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+                      Partícula Testigo (Oscilación Pura)
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                      <span class="w-4 h-0.5 bg-sky-500 inline-block"></span>
+                      Equilibrio ($y = 0$)
+                    </span>
+                  </div>
+                  <div id="particle-status" class="font-mono text-slate-700 hidden sm:inline">
+                    Δy = 0.00 cm (vy = 0.00 cm/s)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fila de Estado Instantáneo en 4 Cajas -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-slate-200 border-t border-slate-200 bg-white text-center">
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Longitud de Onda</p>
+                  <p id="calc-lambda" class="text-base font-bold text-slate-800 font-mono mt-0.5">$\lambda = 20.0\text{ cm}$</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">Espacial</span>
+                </div>
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-sky-600 uppercase tracking-wider">Período ($T$)</p>
+                  <p id="calc-period" class="text-base font-bold text-sky-700 font-mono mt-0.5">$T = 0.50\text{ s}$</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 font-medium">$1 / f$</span>
+                </div>
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-accent uppercase tracking-wider">Velocidad de Fase</p>
+                  <p id="calc-velocity" class="text-base font-bold text-accent font-mono mt-0.5">$v = 40.0\text{ cm/s}$</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-accent-light text-accent font-medium">$v = \lambda \cdot f$</span>
+                </div>
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-amber-600 uppercase tracking-wider">Pulsación ($\omega$)</p>
+                  <p id="calc-omega" class="text-base font-bold text-amber-700 font-mono mt-0.5">$\omega = 12.57\text{ rad/s}$</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-medium">$2\pi f$</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botonera de Modos Rápidos -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <button onclick="setSimMode('transverse')" class="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition shadow-sm text-left">
+                <span class="font-bold text-accent block">〰️ Transversal ($\perp$)</span>
+                <span class="text-[11px] text-slate-500">Cuerda tensada / Cizalla</span>
+              </button>
+              <button onclick="setSimMode('longitudinal')" class="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition shadow-sm text-left">
+                <span class="font-bold text-emerald-700 block">|||||| Longitudinal ($\parallel$)</span>
+                <span class="text-[11px] text-slate-500">Resorte / Sonido acústico</span>
+              </button>
+              <button onclick="setScenario('arterial')" class="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition shadow-sm text-left">
+                <span class="font-bold text-rose-700 block">❤️ Onda de Pulso</span>
+                <span class="text-[11px] text-slate-500">Elasticidad aórtica (PWV)</span>
+              </button>
+              <button onclick="setScenario('tympanum')" class="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition shadow-sm text-left">
+                <span class="font-bold text-amber-700 block">👂 Oído & Tímpano</span>
+                <span class="text-[11px] text-slate-500">Presión sonora aérea</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Parámetros y Sliders (4 cols) -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-sliders text-accent"></i> Parámetros de la Onda
+                </h3>
+                <span class="text-[10px] text-slate-400 font-mono">Modo Continuo</span>
+              </div>
+
+              <!-- Slider 1: Amplitud -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Amplitud ($A$):</span>
+                  <span id="val-amplitude" class="font-mono font-bold text-slate-800">3.0 cm</span>
+                </div>
+                <input type="range" id="sl-amplitude" min="0.5" max="6.0" step="0.1" value="3.0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                  <span>0.5 cm (Baja energía)</span>
+                  <span>6.0 cm (Alta energía)</span>
+                </div>
+              </div>
+
+              <!-- Slider 2: Frecuencia -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Frecuencia ($f = 1/T$):</span>
+                  <span id="val-frequency" class="font-mono font-bold text-accent">2.0 Hz</span>
+                </div>
+                <input type="range" id="sl-frequency" min="0.5" max="5.0" step="0.1" value="2.0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                  <span>0.5 Hz ($T=2.0\text{ s}$)</span>
+                  <span>5.0 Hz ($T=0.2\text{ s}$)</span>
+                </div>
+              </div>
+
+              <!-- Slider 3: Velocidad de Propagación del Medio -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Velocidad del medio ($v$):</span>
+                  <span id="val-speed" class="font-mono font-bold text-slate-800">40.0 cm/s</span>
+                </div>
+                <input type="range" id="sl-speed" min="20" max="90" step="5" value="40" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                  <span>Medio elástico denso</span>
+                  <span>Alta tensión / Rigidez</span>
+                </div>
+              </div>
+
+              <!-- Opciones de Visualización -->
+              <div class="pt-2 border-t border-slate-100 space-y-2 text-xs">
+                <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="chk-trace" checked class="rounded text-accent focus:ring-accent">
+                  <span class="font-medium">Trazar órbita oscilatoria de la partícula testigo</span>
+                </label>
+                <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="chk-slowmo" class="rounded text-accent focus:ring-accent">
+                  <span class="font-medium">Cámara lenta ($0.25\times$) para análisis cinemático</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Tarjeta de Formalización Rápida con LaTeX -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-2 text-xs">
+              <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-square-root-variable text-accent"></i> Ecuación Fundamental
+              </h4>
+              <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-center text-sm font-serif text-accent">
+                $$v = \frac{\lambda}{T} = \lambda \cdot f$$
+              </div>
+              <p class="text-[11px] text-slate-500 leading-relaxed">
+                La velocidad de fase $v$ depende <strong>únicamente de las propiedades físicas del medio</strong> (densidad, elasticidad o tensión). Si la frecuencia $f$ de la fuente cambia, la longitud de onda $\lambda$ se adapta en proporción inversa.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 2: DUALIDAD ESPACIO VS TIEMPO (y(x) vs y(t))                       -->
+      <!-- ========================================================================= -->
+      <div id="view-duality" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <div class="max-w-3xl">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Unidad Didáctica 2</span>
+            <h2 class="text-xl font-bold text-slate-900 mt-1">Dualidad de Representación Gráfica: Espacio $y(x)$ vs. Tiempo $y(t)$</h2>
+            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+              Uno de los principales desafíos conceptuales para los ingresantes a Medicina radica en discriminar entre la <strong>gráfica de perfil espacial</strong> (una instantánea o foto fija de todos los puntos a un tiempo determinado $t_0$) y la <strong>gráfica temporal</strong> (el registro continuo u oscilograma del movimiento de un único punto a lo largo del tiempo).
+            </p>
+          </div>
+
+          <!-- Dos Gráficas Sincronizadas -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            
+            <!-- Gráfica Espacial -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-sky-800 uppercase tracking-wide flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+                  1. Perfil Espacial $y(x)$ a tiempo fijo $t$
+                </h3>
+                <span class="text-[10px] text-slate-500 font-mono">Define $\lambda$</span>
+              </div>
+              <div class="h-56 bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden">
+                <canvas id="canvasSpatial" class="w-full h-full block"></canvas>
+              </div>
+              <p class="text-[11px] text-slate-600 bg-sky-50 p-2.5 rounded-xl border border-sky-100">
+                <strong>📸 Fotografía instantánea:</strong> Muestra la posición vertical de todas las partículas del medio. La distancia física entre dos crestas o dos valles sucesivos determina la <strong>longitud de onda ($\lambda$)</strong> en metros.
+              </p>
+            </div>
+
+            <!-- Gráfica Temporal -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-emerald-800 uppercase tracking-wide flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  2. Registro Temporal $y(t)$ en una posición fija $x$
+                </h3>
+                <span class="text-[10px] text-slate-500 font-mono">Define $T$</span>
+              </div>
+              <div class="h-56 bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden">
+                <canvas id="canvasTemporal" class="w-full h-full block"></canvas>
+              </div>
+              <p class="text-[11px] text-slate-600 bg-emerald-50 p-2.5 rounded-xl border border-emerald-100">
+                <strong>📈 Osciloscopio / ECG:</strong> Muestra la evolución temporal de la partícula testigo. El tiempo transcurrido entre dos crestas sucesivas representa el <strong>período ($T$)</strong> en segundos, análogo al intervalo $R\text{-}R$ cardíaco.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Tabla Comparativa y Formalización -->
+          <div class="mt-6 pt-6 border-t border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <strong class="text-slate-800 block mb-1">Ecuación de Onda Viajera:</strong>
+              <div class="my-1.5 text-center font-serif text-accent text-sm">
+                $$y(x,t) = A \sin(k x - \omega t + \phi)$$
+              </div>
+              <span class="text-slate-500 text-[11px]">Describe la posición de cualquier partícula en cualquier instante. El signo menos indica propagación hacia $+x$.</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <strong class="text-slate-800 block mb-1">Número de Onda Espacial ($k$):</strong>
+              <div class="my-1.5 text-center font-serif text-sky-700 text-sm">
+                $$k = \frac{2\pi}{\lambda} \quad [\text{rad/m}]$$
+              </div>
+              <span class="text-slate-500 text-[11px]">Representa la periodicidad espacial de la onda: cuántos ciclos entran en $2\pi$ unidades de longitud.</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <strong class="text-slate-800 block mb-1">Frecuencia Angular ($\omega$):</strong>
+              <div class="my-1.5 text-center font-serif text-emerald-700 text-sm">
+                $$\omega = \frac{2\pi}{T} = 2\pi f \quad [\text{rad/s}]$$
+              </div>
+              <span class="text-slate-500 text-[11px]">Representa la rapidez de barrido temporal de la fase. Vincula la velocidad: $v = \omega / k$.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 3: DIMENSIONES 1D, 2D, 3D & ONDAS ESTACIONARIAS                     -->
+      <!-- ========================================================================= -->
+      <div id="view-dimensions" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-xs font-bold text-accent uppercase tracking-wider">Unidad Didáctica 3</span>
+              <h2 class="text-xl font-bold text-slate-900 mt-1">Dimensiones Espaciales y Fenómenos de Frontera</h2>
+              <p class="text-sm text-slate-600 mt-1">
+                Comprende la propagación confinada ($1\text{D}$), frentes circulares en superficie ($2\text{D}$), frentes esféricos tridimensionales ($3\text{D}$) y el confinamiento resonante de ondas estacionarias.
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="setDimensionMode('1d-standing')" id="btn-dim-standing" class="px-3 py-1.5 rounded-xl border border-accent bg-accent text-white font-bold text-xs transition shadow-sm">
+                1D Estacionaria
+              </button>
+              <button onclick="setDimensionMode('2d-ripples')" id="btn-dim-ripples" class="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition">
+                2D Superficial
+              </button>
+              <button onclick="setDimensionMode('3d-spherical')" id="btn-dim-spherical" class="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition">
+                3D Esférica / Ecógrafo
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Canvas Interactivo Multidimensional (8 cols) -->
+            <div class="lg:col-span-8 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden relative shadow-sm flex flex-col items-center justify-center">
+              <canvas id="dimCanvas" class="w-full h-80 sm:h-96 block cursor-pointer"></canvas>
+              
+              <div class="w-full bg-white border-t border-slate-200 px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span id="dim-explanation" class="text-slate-700 font-medium">
+                  Onda Estacionaria con 2 extremos fijos: Formación de <strong>Nodos</strong> ($y=0$) y <strong>Antinodos/Vientres</strong>.
+                </span>
+                <div id="dim-harmonic-ctrl" class="flex items-center gap-2">
+                  <label for="sl-harmonic" class="text-slate-600 font-semibold text-xs">Modo Armónico ($n$):</label>
+                  <select id="sl-harmonic" onchange="updateHarmonic(this.value)" class="bg-slate-50 border border-slate-300 rounded-lg px-2 py-1 text-accent font-bold text-xs">
+                    <option value="1">Fundamental (n=1)</option>
+                    <option value="2">2do Armónico (n=2)</option>
+                    <option value="3" selected>3er Armónico (n=3)</option>
+                    <option value="4">4to Armónico (n=4)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Columna Teórica Explicativa (4 cols) -->
+            <div class="lg:col-span-4 space-y-3 text-xs">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong class="text-accent block mb-1">1. Unidimensionales ($1\text{D}$):</strong>
+                <p class="text-slate-600 leading-relaxed text-[11px]">
+                  La energía se propaga en una sola dirección rectilínea. Ejemplo: cuerda tensada, varilla sólida o catéter intraarterial.
+                </p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong class="text-emerald-700 block mb-1">2. Bidimensionales ($2\text{D}$):</strong>
+                <p class="text-slate-600 leading-relaxed text-[11px]">
+                  Frentes concéntricos circulares en un plano superficial elástico (agua o diafragma de estetoscopio).
+                </p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong class="text-amber-700 block mb-1">3. Tridimensionales ($3\text{D}$):</strong>
+                <p class="text-slate-600 leading-relaxed text-[11px]">
+                  Frentes esféricos propagados en todo el volumen espacial (sonido de la laringe, ecógrafo 3D). La intensidad disminuye con el cuadrado de la distancia: $I \propto 1/r^2$.
+                </p>
+              </div>
+
+              <div class="p-3 bg-accent-light rounded-xl border border-accent/20">
+                <strong class="text-accent block mb-1">Resonancia en Cuerdas Vocales:</strong>
+                <p class="text-slate-700 leading-relaxed text-[11px]">
+                  Las cuerdas vocales producen ondas estacionarias. La frecuencia de los armónicos generados depende de su longitud ($L$) y tensión:
+                  $$\lambda_n = \frac{2L}{n} \implies f_n = n \cdot \frac{v}{2L}$$
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 4: BIOFÍSICA EN MEDICINA                                            -->
+      <!-- ========================================================================= -->
+      <div id="view-biomedical" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+          <div class="max-w-3xl">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Unidad Didáctica 4</span>
+            <h2 class="text-xl font-bold text-slate-900 mt-1">Física Médica y Biofísica Ondulatoria en el Organismo Humano</h2>
+            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+              El estudio de las ondas mecánicas es un pilar fundamental en medicina: desde la hemodinámica cardiovascular hasta el diagnóstico ecográfico y la auscultación semiológica.
+            </p>
+          </div>
+
+          <!-- 3 Casos Clínicos Detallados -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Caso 1: Pulso Arterial -->
+            <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 flex flex-col justify-between gap-4">
+              <div>
+                <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xl mb-3">
+                  <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <h3 class="text-sm font-bold text-slate-900 mb-1">1. Onda de Pulso Arterial (PWV)</h3>
+                <p class="text-xs text-rose-700 font-mono mb-2">Moens-Korteweg: $v = \sqrt{\frac{E \cdot h}{\rho \cdot D}}$</p>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  La sístole ventricular no transporta sangre instantáneamente a la periferia; genera una <strong>onda mecánica elástica en la pared arterial</strong> que viaja a $4\text{ a }10\text{ m/s}$, mucho más rápido que los glóbulos rojos ($0.3\text{ a }0.5\text{ m/s}$).
+                </p>
+                <div class="mt-3 p-2.5 rounded-lg bg-white border border-slate-200 text-[11px] text-slate-600">
+                  <strong class="text-rose-600">Relevancia Clínica:</strong> En pacientes ancianos o con aterosclerosis, el módulo de Young ($E$) se eleva, aumentando la velocidad de la onda de pulso y dañando capilares renales y cerebrales.
+                </div>
+              </div>
+              <button onclick="switchTab('lab'); setScenario('arterial');" class="w-full py-2 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs transition">
+                Simular Onda de Pulso Aórtica →
+              </button>
+            </div>
+
+            <!-- Caso 2: Fonendoscopio y Tímpano -->
+            <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 flex flex-col justify-between gap-4">
+              <div>
+                <div class="w-10 h-10 rounded-xl bg-accent-light text-accent flex items-center justify-center font-bold text-xl mb-3">
+                  <i class="fa-solid fa-stethoscope"></i>
+                </div>
+                <h3 class="text-sm font-bold text-slate-900 mb-1">2. Acústica Fisiológica y Auscultación</h3>
+                <p class="text-xs text-accent font-mono mb-2">Impedancia Acústica: $Z = \rho \cdot v$</p>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  El cierre de válvulas cardíacas y el murmullo vesicular pulmonar generan ondas longitudinales de presión aérea. El fonendoscopio acopla la piel para optimizar la transmisión acústica.
+                </p>
+                <div class="mt-3 p-2.5 rounded-lg bg-white border border-slate-200 text-[11px] text-slate-600">
+                  <strong class="text-accent">Membrana Timpánica:</strong> Convierte la onda de presión acústica aérea en vibración mecánica en los huesecillos (martillo, yunque y estribo).
+                </div>
+              </div>
+              <button onclick="switchTab('lab'); setScenario('tympanum');" class="w-full py-2 px-3 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-xs transition">
+                Simular Choque Acústico en Tímpano →
+              </button>
+            </div>
+
+            <!-- Caso 3: Ecografía Diagnóstica -->
+            <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 flex flex-col justify-between gap-4">
+              <div>
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xl mb-3">
+                  <i class="fa-solid fa-satellite-dish"></i>
+                </div>
+                <h3 class="text-sm font-bold text-slate-900 mb-1">3. Ecografía y Ultrasonido Diagnóstico</h3>
+                <p class="text-xs text-amber-700 font-mono mb-2">Reflexión de Eco: $R = \left(\frac{Z_2 - Z_1}{Z_2 + Z_1}\right)^2$</p>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  El transductor emite ondas longitudinales ultrasónicas ($f > 2\text{ MHz}$). Al alcanzar límites entre órganos con distinta impedancia $Z$, parte de la onda se refleja como un eco diagnóstico.
+                </p>
+                <div class="mt-3 p-2.5 rounded-lg bg-white border border-slate-200 text-[11px] text-slate-600">
+                  <strong class="text-amber-700">¿Por qué usamos gel?</strong> El aire entre transductor y piel reflejaría el $99.9\%$ de la energía acústica debido al gran salto de impedancia. El gel iguala la impedancia acústica.
+                </div>
+              </div>
+              <button onclick="setScenario('ultrasound'); switchTab('lab');" class="w-full py-2 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition">
+                Simular Ultrasonido Tisular →
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="bg-white border-t border-gray-200 py-3 text-center text-xs text-gray-500 font-medium">
+    Desarrollado por vesalio - Todos los derechos reservados
+  </footer>
+
+  <!-- Modal: Vademécum Teórico Biofísica Ondulatoria -->
+  <div id="modal-formulas" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-3xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-accent p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-book-bookmark text-xl"></i>
+          <h3 class="font-bold text-base">Vademécum Teórico: Ondas Mecánicas y Biofísica</h3>
+        </div>
+        <button onclick="closeFormulasModal()" class="text-white hover:text-gray-200 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scrollbar leading-relaxed">
+        
+        <!-- 1. Cinemática Ondulatoria -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-wave-square"></i> 1. Relaciones Cinemáticas Fundamentales
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="font-bold text-slate-800">Velocidad de Fase y Propagación:</span>
+              <div class="text-center my-1.5 font-mono text-accent">
+                $$v = \frac{\lambda}{T} = \lambda \cdot f \quad [\text{m/s}]$$
+              </div>
+              <p class="text-[11px] text-gray-600">Determinada exclusivamente por las propiedades elásticas e inerciales del medio.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="font-bold text-slate-800">Frecuencia y Pulsación Angular:</span>
+              <div class="text-center my-1.5 font-mono text-accent">
+                $$\omega = 2\pi f = \frac{2\pi}{T}, \quad k = \frac{2\pi}{\lambda}$$
+              </div>
+              <p class="text-[11px] text-gray-600">$\omega$ mide el ritmo temporal ($\text{rad/s}$); $k$ es el número de onda espacial ($\text{rad/m}$).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Clasificación Cinética -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-arrows-left-right-to-line"></i> 2. Transversales vs. Longitudinales
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="font-bold text-slate-800">Ondas Transversales ($\perp$):</span>
+              <p class="text-[11px] text-gray-600 mt-1">
+                La oscilación del medio es perpendicular a la propagación. Requieren módulo de cizalla (solo se propagan en sólidos y cuerdas tensadas).
+              </p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="font-bold text-slate-800">Ondas Longitudinales ($\parallel$):</span>
+              <p class="text-[11px] text-gray-600 mt-1">
+                La oscilación es paralela a la propagación (compresiones y rarefacciones). El sonido se propaga en gases, líquidos y tejidos corporales.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Hemodinámica y Acústica Fisiológica -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-stethoscope"></i> 3. Biofísica Cardiovascular y Acústica
+          </h4>
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+            <div class="text-center font-mono text-accent">
+              $$\text{Velocidad de Pulso Arterial: } v = \sqrt{\frac{E \cdot h}{\rho \cdot D}}, \quad \text{Impedancia: } Z = \rho \cdot v$$
+            </div>
+            <p><strong>Rigidez Arterial:</strong> Un aumento en la rigidez ($E$) acelera la onda de pulso (hipertensión, envejecimiento vascular).</p>
+            <p><strong>Gel Ecográfico:</strong> Acopla impedancias para evitar la reflexión acústica casi total en la interfase aire-epidermis.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeFormulasModal()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Guía de Uso del Simulador -->
+  <div id="modal-tutorial" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-4xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-accent p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-question text-xl"></i>
+          <h3 class="font-bold text-base">Guía de Uso: Simulador de Ondas Mecánicas y Acústica Fisiológica</h3>
+        </div>
+        <button onclick="closeTutorial()" class="text-white hover:text-gray-200 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scrollbar leading-relaxed">
+        
+        <!-- 1. Navegación -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-compass"></i> 1. Navegación Modular Lateral
+          </h4>
+          <p class="text-gray-600">
+            Utiliza la barra lateral izquierda persistente para alternar en cualquier momento entre el laboratorio interactivo en vivo, la dualidad de gráficas espaciales y temporales, el análisis dimensional geométrico y los casos biofísicos aplicados a la medicina.
+          </p>
+        </div>
+
+        <!-- 2. Controles de Reproducción y Atajos -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-play"></i> 2. Controles de Reproducción y Teclado
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-pause text-accent mr-1"></i> Pausar / Reanudar:</strong>
+              <p class="text-gray-600 text-[11px]">Haz clic en el botón principal o presiona la tecla <kbd class="px-1.5 py-0.5 bg-white border border-gray-300 rounded font-mono font-bold text-slate-800 text-[10px]">Espacio</kbd>.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-forward-step text-accent mr-1"></i> Modo Paso a Paso:</strong>
+              <p class="text-gray-600 text-[11px]">Avanza la perturbación fotograma a fotograma para analizar la posición de la partícula en instantes críticos.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-rotate-left text-accent mr-1"></i> Reiniciar ($t = 0$):</strong>
+              <p class="text-gray-600 text-[11px]">Restaura la perturbación al origen con los parámetros predeterminados de fábrica.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Módulos Temáticos -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> 3. Módulos Temáticos y Características Didácticas
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-flask-vial text-accent"></i> 1. Laboratorio Dinámico de Propagación
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>Partícula Testigo (roja):</strong> Comprueba de forma gráfica el postulado fundamental: la materia no se traslada con la onda, solo oscila localmente.<br>
+                • <strong>Onda Transversal ($\perp$):</strong> Las partículas se desplazan verticalmente mientras la energía viaja horizontalmente (cuerdas tensadas).<br>
+                • <strong>Onda Longitudinal ($\parallel$):</strong> Compresiones (alta presión) y rarefacciones (baja presión) alternantes.<br>
+                • <strong>Sliders cinemáticos:</strong> Varía amplitud ($A$), frecuencia ($f$) y velocidad del medio ($v$), con recálculo automático de $\lambda = v/f$, $T = 1/f$ y $\omega = 2\pi f$.<br>
+                • <strong>Herramientas visuales:</strong> Trazador de órbita y modo cámara lenta ($0.25\times$).
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-chart-line text-accent"></i> 2. Dualidad Espacio vs. Tiempo
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>Perfil Espacial $y(x)$:</strong> Fotografía a tiempo fijo $t_0$. Permite medir físicamente la <strong>longitud de onda ($\lambda$)</strong> entre crestas consecutivas.<br>
+                • <strong>Registro Temporal $y(t)$:</strong> Registro tipo osciloscopio o electrocardiograma ($\text{ECG}$) de un solo punto $x_0$, donde la distancia entre picos define el <strong>período ($T$)</strong>.<br>
+                • <strong>Formalización:</strong> Desglose analítico de la función viajera $y(x,t) = A\sin(kx - \omega t)$ y el número de onda $k = 2\pi/\lambda$.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-globe text-accent"></i> 3. Dimensiones Espaciales y Fronteras
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>1D Estacionarias:</strong> Formación de nodos ($y=0$) y antinodos por reflexión en extremos fijos. Selector interactivo de modos armónicos ($n = 1, 2, 3, 4$).<br>
+                • <strong>2D Superficiales:</strong> Ondas circulares concéntricas en interfases líquidas con fuente puntual central.<br>
+                • <strong>3D Esféricas:</strong> Frentes volumétricos de ultrasonido médico con atenuación de intensidad por ley cuadrática ($I \propto 1/r^2$).
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-heart-pulse text-accent"></i> 4. Biofísica en Medicina
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>Onda de Pulso Arterial (PWV):</strong> Ecuación de Moens-Korteweg, rigidez de la aorta y envejecimiento vascular.<br>
+                • <strong>Acústica y Fonendoscopio:</strong> Impedancia acústica ($Z = \rho v$) y transferencia mecánica a la membrana timpánica.<br>
+                • <strong>Ecografía Diagnóstica:</strong> Reflexión de eco en interfases tisulares y justificación física del gel ecográfico.<br>
+                • <strong>Acceso directo:</strong> Cada caso incluye un botón que precarga la simulación correspondiente en el laboratorio.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeTutorial()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Comenzar Experiencia
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lógica y Simulación en JavaScript -->
+  <script>
+    /* =========================================================================
+       1. ESTADO GLOBAL DE LA SIMULACIÓN
+       ========================================================================= */
+    const state = {
+      activeTab: 'lab',
+      isRunning: true,
+      slowMo: false,
+      mode: 'transverse', // 'transverse' | 'longitudinal'
+      dimMode: '1d-standing', // '1d-standing' | '2d-ripples' | '3d-spherical'
+      harmonic: 3,
+
+      // Parámetros Físicos
+      amplitude: 30, // px visuales
+      frequency: 2.0, // Hz
+      speed: 120, // px/s -> equivalente a 40.0 cm/s
+      showTrace: true,
+
+      simTime: 0,
+      lastTimestamp: 0,
+
+      // Partícula Testigo
+      witnessIndex: 12,
+      numParticles: 42
+    };
+
+    /* Elementos DOM y Contextos de Canvas */
+    const simCanvas = document.getElementById('simCanvas');
+    const ctx = simCanvas.getContext('2d');
+
+    const canvasSpatial = document.getElementById('canvasSpatial');
+    const ctxSpatial = canvasSpatial.getContext('2d');
+
+    const canvasTemporal = document.getElementById('canvasTemporal');
+    const ctxTemporal = canvasTemporal.getContext('2d');
+
+    const dimCanvas = document.getElementById('dimCanvas');
+    const ctxDim = dimCanvas.getContext('2d');
+
+    const slAmp = document.getElementById('sl-amplitude');
+    const slFreq = document.getElementById('sl-frequency');
+    const slSpeed = document.getElementById('sl-speed');
+    const chkTrace = document.getElementById('chk-trace');
+    const chkSlowmo = document.getElementById('chk-slowmo');
+
+    /* =========================================================================
+       2. CONTROL DE PESTAÑAS (TABS) Y MODALES
+       ========================================================================= */
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-accent', 'text-white', 'shadow-sm');
+        btn.classList.add('text-gray-700', 'hover:bg-gray-100');
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-accent', 'text-white', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+      }
+
+      ['lab', 'duality', 'dimensions', 'biomedical'].forEach(id => {
+        const view = document.getElementById(`view-${id}`);
+        if (view) {
+          if (id === tabId) {
+            view.classList.remove('hidden');
+          } else {
+            view.classList.add('hidden');
+          }
+        }
+      });
+
+      renderMathWhenReady();
+      resizeAllCanvases();
+    }
+
+    function openFormulasModal() {
+      document.getElementById('modal-formulas').classList.remove('hidden');
+      renderMathWhenReady();
+    }
+
+    function closeFormulasModal() {
+      document.getElementById('modal-formulas').classList.add('hidden');
+    }
+
+    function openTutorial() {
+      document.getElementById('modal-tutorial').classList.remove('hidden');
+      renderMathWhenReady();
+    }
+
+    function closeTutorial() {
+      document.getElementById('modal-tutorial').classList.add('hidden');
+    }
+
+    /* =========================================================================
+       3. RESIZE HI-DPI PARA PANTALLAS RETINA
+       ========================================================================= */
+    function resizeCanvas(cv) {
+      if (!cv) return;
+      const rect = cv.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      if (rect.width > 0 && rect.height > 0) {
+        cv.width = rect.width * dpr;
+        cv.height = rect.height * dpr;
+        const c = cv.getContext('2d');
+        c.scale(dpr, dpr);
+      }
+    }
+
+    function resizeAllCanvases() {
+      resizeCanvas(simCanvas);
+      resizeCanvas(canvasSpatial);
+      resizeCanvas(canvasTemporal);
+      resizeCanvas(dimCanvas);
+    }
+
+    window.addEventListener('resize', resizeAllCanvases);
+
+    /* =========================================================================
+       4. CONTROLADORES DE ENTRADA Y PARÁMETROS
+       ========================================================================= */
+    slAmp.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      state.amplitude = val * 10;
+      document.getElementById('val-amplitude').textContent = `${val.toFixed(1)} cm`;
+      updateCalculations();
+    });
+
+    slFreq.addEventListener('input', (e) => {
+      state.frequency = parseFloat(e.target.value);
+      document.getElementById('val-frequency').textContent = `${state.frequency.toFixed(1)} Hz`;
+      updateCalculations();
+    });
+
+    slSpeed.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      state.speed = val * 3;
+      document.getElementById('val-speed').textContent = `${val.toFixed(1)} cm/s`;
+      updateCalculations();
+    });
+
+    chkTrace.addEventListener('change', (e) => {
+      state.showTrace = e.target.checked;
+    });
+
+    chkSlowmo.addEventListener('change', (e) => {
+      state.slowMo = e.target.checked;
+    });
+
+    function togglePlayPause() {
+      state.isRunning = !state.isRunning;
+      const lbl = document.getElementById('label-play');
+      const icon = document.getElementById('icon-play');
+      if (state.isRunning) {
+        lbl.textContent = 'Pausar (Space)';
+        icon.innerHTML = '<path d="M4 4l12 6-12 6z"/>';
+      } else {
+        lbl.textContent = 'Reanudar';
+        icon.innerHTML = '<path d="M4 4h4v12H4zm8 0h4v12h-4z"/>';
+      }
+    }
+
+    function stepSimulation() {
+      state.isRunning = false;
+      const lbl = document.getElementById('label-play');
+      const icon = document.getElementById('icon-play');
+      lbl.textContent = 'Reanudar';
+      icon.innerHTML = '<path d="M4 4h4v12H4zm8 0h4v12h-4z"/>';
+      state.simTime += 0.04;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        togglePlayPause();
+      }
+    });
+
+    function resetSimulation() {
+      state.simTime = 0;
+      state.amplitude = 30;
+      state.frequency = 2.0;
+      state.speed = 120;
+      slAmp.value = 3.0;
+      slFreq.value = 2.0;
+      slSpeed.value = 40;
+      document.getElementById('val-amplitude').textContent = '3.0 cm';
+      document.getElementById('val-frequency').textContent = '2.0 Hz';
+      document.getElementById('val-speed').textContent = '40.0 cm/s';
+      updateCalculations();
+    }
+
+    function updateCalculations() {
+      const lambda_cm = (state.speed / 3) / state.frequency;
+      const period = 1 / state.frequency;
+      const velocity_cm = (state.speed / 3);
+      const omega = 2 * Math.PI * state.frequency;
+
+      const statsEl = document.getElementById('hud-stats');
+      if (statsEl) {
+        statsEl.textContent = `v = ${velocity_cm.toFixed(1)} cm/s | λ = ${lambda_cm.toFixed(1)} cm | f = ${state.frequency.toFixed(2)} Hz`;
+      }
+
+      const lEl = document.getElementById('calc-lambda');
+      const pEl = document.getElementById('calc-period');
+      const vEl = document.getElementById('calc-velocity');
+      const oEl = document.getElementById('calc-omega');
+
+      if (lEl) lEl.innerHTML = `$\\lambda = ${lambda_cm.toFixed(1)}\\text{ cm}$`;
+      if (pEl) pEl.innerHTML = `$T = ${period.toFixed(2)}\\text{ s}$`;
+      if (vEl) vEl.innerHTML = `$v = ${velocity_cm.toFixed(1)}\\text{ cm/s}$`;
+      if (oEl) oEl.innerHTML = `$\\omega = ${omega.toFixed(2)}\\text{ rad/s}$`;
+
+      renderMathWhenReady();
+    }
+
+    function setSimMode(mode) {
+      state.mode = mode;
+      const pTrans = document.getElementById('preset-trans');
+      const pLong = document.getElementById('preset-long');
+      const hudMode = document.getElementById('hud-mode');
+
+      if (mode === 'transverse') {
+        pTrans.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-light text-accent border border-accent/20 transition';
+        pLong.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition';
+        hudMode.textContent = 'Onda Transversal en Cuerda Tensada (Partícula ⟂ Onda)';
+        hudMode.className = 'text-xs font-bold text-accent uppercase tracking-wide';
+      } else {
+        pLong.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 transition';
+        pTrans.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 transition';
+        hudMode.textContent = 'Onda Longitudinal en Resorte / Gas (Compresión y Rarefacción ∥ Onda)';
+        hudMode.className = 'text-xs font-bold text-emerald-700 uppercase tracking-wide';
+      }
+    }
+
+    function setScenario(scen) {
+      if (scen === 'arterial') {
+        setSimMode('transverse');
+        document.getElementById('hud-mode').textContent = '❤️ Biomédico: Onda de Pulso Arterial Aórtica (PWV)';
+        document.getElementById('hud-mode').className = 'text-xs font-bold text-rose-600 uppercase tracking-wide';
+      } else if (scen === 'tympanum') {
+        setSimMode('longitudinal');
+        document.getElementById('hud-mode').textContent = '👂 Biomédico: Presión Sonora e Impacto en Membrana Timpánica';
+        document.getElementById('hud-mode').className = 'text-xs font-bold text-amber-700 uppercase tracking-wide';
+      } else if (scen === 'ultrasound') {
+        setSimMode('longitudinal');
+        document.getElementById('hud-mode').textContent = '📡 Biomédico: Trenes de Ultrasonido y Reflexión de Eco';
+        document.getElementById('hud-mode').className = 'text-xs font-bold text-indigo-700 uppercase tracking-wide';
+      }
+    }
+
+    function setDimensionMode(dim) {
+      state.dimMode = dim;
+      const b1 = document.getElementById('btn-dim-standing');
+      const b2 = document.getElementById('btn-dim-ripples');
+      const b3 = document.getElementById('btn-dim-spherical');
+      const expl = document.getElementById('dim-explanation');
+      const harmCtrl = document.getElementById('dim-harmonic-ctrl');
+
+      [b1, b2, b3].forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition';
+      });
+
+      if (dim === '1d-standing') {
+        b1.className = 'px-3 py-1.5 rounded-xl border border-accent bg-accent text-white font-bold text-xs transition shadow-sm';
+        expl.innerHTML = '1D Estacionaria: Dos extremos fijos reflejan la onda, formando <strong>Nodos</strong> inmóviles y <strong>Antinodos</strong>.';
+        harmCtrl.style.display = 'flex';
+      } else if (dim === '2d-ripples') {
+        b2.className = 'px-3 py-1.5 rounded-xl border border-emerald-600 bg-emerald-600 text-white font-bold text-xs transition shadow-sm';
+        expl.innerHTML = '2D Superficial: Frentes de onda circulares concéntricos que transmiten energía en el plano bidimensional.';
+        harmCtrl.style.display = 'none';
+      } else {
+        b3.className = 'px-3 py-1.5 rounded-xl border border-amber-600 bg-amber-600 text-white font-bold text-xs transition shadow-sm';
+        expl.innerHTML = '3D Frentes Esféricos: Ondas de ultrasonido y voz expandiéndose en el espacio; $I \\propto 1/r^2$.';
+        harmCtrl.style.display = 'none';
+      }
+      renderMathWhenReady();
+    }
+
+    function updateHarmonic(h) {
+      state.harmonic = parseInt(h, 10);
+    }
+
+    /* =========================================================================
+       5. DIBUJO EN CANVAS: MODO CLARO CIENTÍFICO (Grid, Ejes y Ondas)
+       ========================================================================= */
+    function drawGrid(context, width, height) {
+      context.beginPath();
+      context.strokeStyle = '#e2e8f0';
+      context.lineWidth = 1;
+      const step = 25;
+      for (let x = 0; x < width; x += step) {
+        context.moveTo(x, 0);
+        context.lineTo(x, height);
+      }
+      for (let y = 0; y < height; y += step) {
+        context.moveTo(0, y);
+        context.lineTo(width, y);
+      }
+      context.stroke();
+    }
+
+    function drawArrow(context, fromX, fromY, toX, toY, color) {
+      const headlen = 8;
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      context.beginPath();
+      context.strokeStyle = color;
+      context.fillStyle = color;
+      context.lineWidth = 2;
+      context.moveTo(fromX, fromY);
+      context.lineTo(toX, toY);
+      context.stroke();
+
+      context.beginPath();
+      context.moveTo(toX, toY);
+      context.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      context.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      context.closePath();
+      context.fill();
+    }
+
+    function drawOscillatorPiston(context, x, y, equilibriumY) {
+      context.strokeStyle = '#94a3b8';
+      context.lineWidth = 4;
+      context.beginPath();
+      context.moveTo(x - 8, equilibriumY - 55);
+      context.lineTo(x - 8, equilibriumY + 55);
+      context.stroke();
+
+      context.fillStyle = '#436600';
+      context.beginPath();
+      context.roundRect(x - 14, y - 12, 12, 24, 4);
+      context.fill();
+    }
+
+    function renderMainLab() {
+      if (!ctx) return;
+      const w = simCanvas.getBoundingClientRect().width;
+      const h = simCanvas.getBoundingClientRect().height;
+
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+
+      const k = (2 * Math.PI * state.frequency) / state.speed;
+      const omega = 2 * Math.PI * state.frequency;
+      const t = state.simTime;
+      const centerY = h / 2;
+
+      // Línea de equilibrio (y = 0)
+      ctx.beginPath();
+      ctx.strokeStyle = '#94a3b8';
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 1.5;
+      ctx.moveTo(30, centerY);
+      ctx.lineTo(w - 30, centerY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // ONDA TRANSVERSAL
+      if (state.mode === 'transverse') {
+        const isArtery = document.getElementById('hud-mode')?.textContent.includes('Pulso');
+        const startX = 40;
+        const endX = w - 40;
+        const step = 2;
+
+        ctx.beginPath();
+        ctx.lineWidth = isArtery ? 4 : 3;
+        ctx.strokeStyle = isArtery ? '#e11d48' : '#0284c7';
+
+        for (let x = startX; x <= endX; x += step) {
+          const dist = x - startX;
+          const y = centerY - state.amplitude * Math.sin(k * dist - omega * t);
+          if (x === startX) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Si es escenario arterial, dibujar túnica vascular
+        if (isArtery) {
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(225, 29, 72, 0.35)';
+          ctx.lineWidth = 2;
+          for (let x = startX; x <= endX; x += step) {
+            const dist = x - startX;
+            const yTop = (centerY - 45) - state.amplitude * 0.6 * Math.sin(k * dist - omega * t);
+            if (x === startX) ctx.moveTo(x, yTop);
+            else ctx.lineTo(x, yTop);
+          }
+          for (let x = startX; x <= endX; x += step) {
+            const dist = x - startX;
+            const yBot = (centerY + 45) + state.amplitude * 0.6 * Math.sin(k * dist - omega * t);
+            if (x === startX) ctx.moveTo(x, yBot);
+            else ctx.lineTo(x, yBot);
+          }
+          ctx.stroke();
+
+          // Marcador de eritrocito con avance lento
+          const bloodX = (startX + ((t * 22) % (endX - startX)));
+          ctx.beginPath();
+          ctx.fillStyle = '#e11d48';
+          ctx.arc(bloodX, centerY, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.font = '10px Outfit, sans-serif';
+          ctx.fillStyle = '#be123c';
+          ctx.fillText('Eritrocito (flujo lento neto)', bloodX - 45, centerY + 20);
+        }
+
+        // Partículas en la cuerda
+        const particleSpacing = (endX - startX) / (state.numParticles - 1);
+        let witnessY = centerY;
+        let witnessVy = 0;
+
+        for (let i = 0; i < state.numParticles; i++) {
+          const px = startX + i * particleSpacing;
+          const dist = px - startX;
+          const py = centerY - state.amplitude * Math.sin(k * dist - omega * t);
+
+          const isWitness = (i === state.witnessIndex);
+
+          if (isWitness) {
+            witnessY = py;
+            witnessVy = -state.amplitude * omega * Math.cos(k * dist - omega * t);
+
+            if (state.showTrace) {
+              ctx.beginPath();
+              ctx.strokeStyle = 'rgba(225, 29, 72, 0.4)';
+              ctx.setLineDash([3, 3]);
+              ctx.lineWidth = 1.5;
+              ctx.moveTo(px, centerY - state.amplitude - 12);
+              ctx.lineTo(px, centerY + state.amplitude + 12);
+              ctx.stroke();
+              ctx.setLineDash([]);
+
+              drawArrow(ctx, px + 15, centerY, px + 15, py, '#e11d48');
+              ctx.font = '10px JetBrains Mono, monospace';
+              ctx.fillStyle = '#be123c';
+              ctx.fillText('vy (⊥)', px + 22, (centerY + py) / 2);
+            }
+
+            // Partícula Testigo Destacada
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(225, 29, 72, 0.25)';
+            ctx.arc(px, py, 11, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.fillStyle = '#e11d48';
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.beginPath();
+            ctx.fillStyle = '#0284c7';
+            ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        const deltaY = ((centerY - witnessY) / 10).toFixed(2);
+        const vyVal = (witnessVy / 10).toFixed(2);
+        const pStat = document.getElementById('particle-status');
+        if (pStat) {
+          pStat.textContent = `Partícula Testigo: Δy = ${deltaY} cm (vy = ${vyVal} cm/s) [Oscila en x fija]`;
+        }
+
+        drawOscillatorPiston(ctx, startX, centerY - state.amplitude * Math.sin(-omega * t), centerY);
+        drawArrow(ctx, startX + 50, centerY - 90, startX + 160, centerY - 90, '#436600');
+        ctx.fillStyle = '#436600';
+        ctx.font = 'bold 11px Outfit, sans-serif';
+        ctx.fillText('Propagación de Fase v (→ horizontal)', startX + 50, centerY - 98);
+
+      } 
+      // ONDA LONGITUDINAL
+      else {
+        const isTympanum = document.getElementById('hud-mode')?.textContent.includes('Tímpano');
+        const startX = 60;
+        const endX = w - (isTympanum ? 90 : 50);
+        const span = endX - startX;
+        const rows = 9;
+        const cols = 48;
+        const xSpacing = span / (cols - 1);
+        const ySpacing = 16;
+        const startY = centerY - ((rows - 1) * ySpacing) / 2;
+
+        for (let r = 0; r < rows; r++) {
+          const baseY = startY + r * ySpacing;
+          for (let c = 0; c < cols; c++) {
+            const equilibriumX = startX + c * xSpacing;
+            const dist = equilibriumX - startX;
+            const displacementX = (state.amplitude * 0.75) * Math.cos(k * dist - omega * t);
+            const actualX = equilibriumX + displacementX;
+
+            const isWitness = (r === Math.floor(rows / 2) && c === state.witnessIndex);
+
+            if (isWitness) {
+              if (state.showTrace) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(225, 29, 72, 0.4)';
+                ctx.setLineDash([3, 3]);
+                ctx.moveTo(equilibriumX - state.amplitude * 0.75, baseY);
+                ctx.lineTo(equilibriumX + state.amplitude * 0.75, baseY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+              }
+
+              ctx.beginPath();
+              ctx.fillStyle = 'rgba(225, 29, 72, 0.25)';
+              ctx.arc(actualX, baseY, 10, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.beginPath();
+              ctx.fillStyle = '#e11d48';
+              ctx.arc(actualX, baseY, 5.5, 0, Math.PI * 2);
+              ctx.fill();
+
+              const deltaX = (displacementX / 10).toFixed(2);
+              const pStat = document.getElementById('particle-status');
+              if (pStat) {
+                pStat.textContent = `Partícula Testigo: Δx = ${deltaX} cm [Oscilación ∥ a propagación]`;
+              }
+            } else {
+              ctx.beginPath();
+              const strain = - (k * state.amplitude * 0.75) * Math.sin(k * dist - omega * t);
+              ctx.fillStyle = strain > 0 ? '#15803d' : '#0284c7';
+              ctx.arc(actualX, baseY, 3.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+
+        ctx.font = '10px Outfit, sans-serif';
+        ctx.fillStyle = '#15803d';
+        ctx.fillText('Compresión (Alta Presión)', startX + 30, centerY - 95);
+        ctx.fillStyle = '#0284c7';
+        ctx.fillText('Rarefacción (Baja Presión)', startX + 180, centerY - 95);
+
+        if (isTympanum) {
+          const tympX = endX + 15;
+          const tympDisplace = (state.amplitude * 0.4) * Math.cos(k * span - omega * t);
+
+          ctx.beginPath();
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 4;
+          ctx.moveTo(tympX + tympDisplace, centerY - 75);
+          ctx.quadraticCurveTo(tympX + 15 + tympDisplace, centerY, tympX + tympDisplace, centerY + 75);
+          ctx.stroke();
+
+          ctx.fillStyle = '#b45309';
+          ctx.font = 'bold 11px Outfit, sans-serif';
+          ctx.fillText('Membrana Timpánica', tympX - 45, centerY - 85);
+          ctx.font = '10px Outfit, sans-serif';
+          ctx.fillStyle = '#64748b';
+          ctx.fillText('Vibración mecánica', tympX - 35, centerY + 95);
+        }
+
+        drawArrow(ctx, startX + 40, centerY + 90, startX + 160, centerY + 90, '#15803d');
+        ctx.fillStyle = '#15803d';
+        ctx.font = 'bold 11px Outfit, sans-serif';
+        ctx.fillText('Propagación Acústica (→ horizontal)', startX + 40, centerY + 108);
+      }
+    }
+
+    /* =========================================================================
+       6. DUALIDAD: y(x) vs y(t)
+       ========================================================================= */
+    let temporalHistory = [];
+    const maxHistoryPoints = 250;
+
+    function renderDualityCanvases() {
+      if (!ctxSpatial || !ctxTemporal || state.activeTab !== 'duality') return;
+
+      const wS = canvasSpatial.getBoundingClientRect().width;
+      const hS = canvasSpatial.getBoundingClientRect().height;
+      const wT = canvasTemporal.getBoundingClientRect().width;
+      const hT = canvasTemporal.getBoundingClientRect().height;
+
+      ctxSpatial.clearRect(0, 0, wS, hS);
+      ctxTemporal.clearRect(0, 0, wT, hT);
+
+      drawGrid(ctxSpatial, wS, hS);
+      drawGrid(ctxTemporal, wT, hT);
+
+      const k = (2 * Math.PI * state.frequency) / state.speed;
+      const omega = 2 * Math.PI * state.frequency;
+      const t = state.simTime;
+      const centerYS = hS / 2;
+      const centerYT = hT / 2;
+
+      // 1. ESPACIAL y(x)
+      ctxSpatial.beginPath();
+      ctxSpatial.strokeStyle = '#94a3b8';
+      ctxSpatial.setLineDash([4, 4]);
+      ctxSpatial.moveTo(25, centerYS);
+      ctxSpatial.lineTo(wS - 25, centerYS);
+      ctxSpatial.stroke();
+      ctxSpatial.setLineDash([]);
+
+      ctxSpatial.beginPath();
+      ctxSpatial.strokeStyle = '#0284c7';
+      ctxSpatial.lineWidth = 2.5;
+      const startX = 30;
+      const endX = wS - 30;
+
+      for (let x = startX; x <= endX; x += 2) {
+        const dist = x - startX;
+        const y = centerYS - state.amplitude * Math.sin(k * dist - omega * t);
+        if (x === startX) ctxSpatial.moveTo(x, y);
+        else ctxSpatial.lineTo(x, y);
+      }
+      ctxSpatial.stroke();
+
+      // Marcador de Longitud de Onda
+      const lambdaPx = (2 * Math.PI) / k;
+      if (lambdaPx < (endX - startX)) {
+        const crest1X = startX + 30;
+        const crest2X = crest1X + lambdaPx;
+        const measureY = centerYS - state.amplitude - 15;
+
+        if (crest2X <= endX) {
+          ctxSpatial.beginPath();
+          ctxSpatial.strokeStyle = '#d97706';
+          ctxSpatial.lineWidth = 1.5;
+          ctxSpatial.moveTo(crest1X, measureY);
+          ctxSpatial.lineTo(crest2X, measureY);
+          ctxSpatial.moveTo(crest1X, measureY - 5);
+          ctxSpatial.lineTo(crest1X, measureY + 5);
+          ctxSpatial.moveTo(crest2X, measureY - 5);
+          ctxSpatial.lineTo(crest2X, measureY + 5);
+          ctxSpatial.stroke();
+
+          ctxSpatial.font = 'bold 11px Outfit, sans-serif';
+          ctxSpatial.fillStyle = '#b45309';
+          ctxSpatial.fillText('Longitud de Onda (λ)', (crest1X + crest2X) / 2 - 45, measureY - 6);
+        }
+      }
+
+      // 2. TEMPORAL y(t)
+      const currentWitnessY = state.amplitude * Math.sin(-omega * t);
+      temporalHistory.push(currentWitnessY);
+      if (temporalHistory.length > maxHistoryPoints) {
+        temporalHistory.shift();
+      }
+
+      ctxTemporal.beginPath();
+      ctxTemporal.strokeStyle = '#94a3b8';
+      ctxTemporal.setLineDash([4, 4]);
+      ctxTemporal.moveTo(25, centerYT);
+      ctxTemporal.lineTo(wT - 25, centerYT);
+      ctxTemporal.stroke();
+      ctxTemporal.setLineDash([]);
+
+      ctxTemporal.beginPath();
+      ctxTemporal.strokeStyle = '#15803d';
+      ctxTemporal.lineWidth = 2.5;
+
+      const stepT = (wT - 60) / maxHistoryPoints;
+      for (let i = 0; i < temporalHistory.length; i++) {
+        const px = wT - 30 - (temporalHistory.length - 1 - i) * stepT;
+        const py = centerYT - temporalHistory[i];
+        if (i === 0) ctxTemporal.moveTo(px, py);
+        else ctxTemporal.lineTo(px, py);
+      }
+      ctxTemporal.stroke();
+
+      if (temporalHistory.length > 0) {
+        const latestX = wT - 30;
+        const latestY = centerYT - temporalHistory[temporalHistory.length - 1];
+        ctxTemporal.beginPath();
+        ctxTemporal.fillStyle = '#e11d48';
+        ctxTemporal.arc(latestX, latestY, 5, 0, Math.PI * 2);
+        ctxTemporal.fill();
+      }
+
+      const periodInPoints = (1 / state.frequency) * 60;
+      if (periodInPoints * stepT < wT - 100) {
+        const t1X = 50;
+        const t2X = t1X + periodInPoints * stepT;
+        const measureY = centerYT + state.amplitude + 20;
+
+        ctxTemporal.beginPath();
+        ctxTemporal.strokeStyle = '#15803d';
+        ctxTemporal.lineWidth = 1.5;
+        ctxTemporal.moveTo(t1X, measureY);
+        ctxTemporal.lineTo(t2X, measureY);
+        ctxTemporal.moveTo(t1X, measureY - 5);
+        ctxTemporal.lineTo(t1X, measureY + 5);
+        ctxTemporal.moveTo(t2X, measureY - 5);
+        ctxTemporal.lineTo(t2X, measureY + 5);
+        ctxTemporal.stroke();
+
+        ctxTemporal.font = 'bold 11px Outfit, sans-serif';
+        ctxTemporal.fillStyle = '#15803d';
+        ctxTemporal.fillText('Período (T)', (t1X + t2X) / 2 - 25, measureY + 16);
+      }
+    }
+
+    /* =========================================================================
+       7. DIMENSIONES ESPACIALES & ONDAS ESTACIONARIAS
+       ========================================================================= */
+    function renderDimensionCanvas() {
+      if (!ctxDim || state.activeTab !== 'dimensions') return;
+      const w = dimCanvas.getBoundingClientRect().width;
+      const h = dimCanvas.getBoundingClientRect().height;
+
+      ctxDim.clearRect(0, 0, w, h);
+      drawGrid(ctxDim, w, h);
+
+      const t = state.simTime;
+
+      // 1D ESTACIONARIA
+      if (state.dimMode === '1d-standing') {
+        const n = state.harmonic;
+        const centerY = h / 2;
+        const startX = 60;
+        const endX = w - 60;
+        const L = endX - startX;
+        const omega = 2 * Math.PI * state.frequency;
+
+        // Envolvente de vibración
+        ctxDim.beginPath();
+        ctxDim.strokeStyle = 'rgba(67, 102, 0, 0.25)';
+        ctxDim.setLineDash([3, 3]);
+        for (let x = startX; x <= endX; x += 2) {
+          const posX = x - startX;
+          const envY = state.amplitude * 1.3 * Math.sin((n * Math.PI * posX) / L);
+          if (x === startX) ctxDim.moveTo(x, centerY - envY);
+          else ctxDim.lineTo(x, centerY - envY);
+        }
+        for (let x = startX; x <= endX; x += 2) {
+          const posX = x - startX;
+          const envY = state.amplitude * 1.3 * Math.sin((n * Math.PI * posX) / L);
+          if (x === startX) ctxDim.moveTo(x, centerY + envY);
+          else ctxDim.lineTo(x, centerY + envY);
+        }
+        ctxDim.stroke();
+        ctxDim.setLineDash([]);
+
+        // Onda en tiempo real
+        ctxDim.beginPath();
+        ctxDim.strokeStyle = '#436600';
+        ctxDim.lineWidth = 3.5;
+        for (let x = startX; x <= endX; x += 2) {
+          const posX = x - startX;
+          const y = centerY - (state.amplitude * 1.3) * Math.sin((n * Math.PI * posX) / L) * Math.cos(omega * t);
+          if (x === startX) ctxDim.moveTo(x, y);
+          else ctxDim.lineTo(x, y);
+        }
+        ctxDim.stroke();
+
+        // Nodos y Vientres
+        for (let i = 0; i <= n; i++) {
+          const nodeX = startX + (i * L) / n;
+          ctxDim.beginPath();
+          ctxDim.fillStyle = '#e11d48';
+          ctxDim.arc(nodeX, centerY, 5, 0, Math.PI * 2);
+          ctxDim.fill();
+
+          ctxDim.font = 'bold 11px Outfit, sans-serif';
+          ctxDim.fillStyle = '#be123c';
+          ctxDim.fillText(`Nodo (y=0)`, nodeX - 25, centerY + 22);
+
+          if (i < n) {
+            const antiX = startX + ((i + 0.5) * L) / n;
+            ctxDim.fillStyle = '#15803d';
+            ctxDim.fillText(`Vientre`, antiX - 18, centerY - (state.amplitude * 1.3) - 10);
+          }
+        }
+
+        // Soportes fijos
+        ctxDim.fillStyle = '#64748b';
+        ctxDim.fillRect(startX - 15, centerY - 40, 15, 80);
+        ctxDim.fillRect(endX, centerY - 40, 15, 80);
+
+      } 
+      // 2D RIPPLES
+      else if (state.dimMode === '2d-ripples') {
+        const centerX = w / 2;
+        const centerY = h / 2;
+        const numRings = 9;
+        const ringSpacing = 28;
+        const waveSpeed = 45;
+
+        for (let i = 1; i <= numRings; i++) {
+          const baseRadius = (i * ringSpacing + (t * waveSpeed)) % (Math.min(w, h) / 1.8);
+          const alpha = Math.max(0, 1 - (baseRadius / (Math.min(w, h) / 1.8)));
+
+          ctxDim.beginPath();
+          ctxDim.strokeStyle = `rgba(21, 128, 61, ${alpha * 0.9})`;
+          ctxDim.lineWidth = 3;
+          ctxDim.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+          ctxDim.stroke();
+        }
+
+        ctxDim.beginPath();
+        ctxDim.fillStyle = '#436600';
+        ctxDim.arc(centerX, centerY, 7, 0, Math.PI * 2);
+        ctxDim.fill();
+        ctxDim.font = '11px Outfit, sans-serif';
+        ctxDim.fillStyle = '#1e293b';
+        ctxDim.fillText('Fuente Puntual (Foco 2D)', centerX - 60, centerY - 15);
+
+      } 
+      // 3D SPHERICAL ULTRASOUND
+      else if (state.dimMode === '3d-spherical') {
+        const originX = 100;
+        const centerY = h / 2;
+        const numSpheres = 8;
+        const speed = 55;
+
+        // Transductor
+        ctxDim.fillStyle = '#475569';
+        ctxDim.strokeStyle = '#d97706';
+        ctxDim.lineWidth = 2;
+        ctxDim.beginPath();
+        ctxDim.roundRect(originX - 60, centerY - 45, 55, 90, 8);
+        ctxDim.fill();
+        ctxDim.stroke();
+
+        ctxDim.fillStyle = '#ffffff';
+        ctxDim.font = 'bold 10px Outfit, sans-serif';
+        ctxDim.fillText('Sonda US', originX - 55, centerY - 5);
+        ctxDim.fillText('3.5 MHz', originX - 52, centerY + 10);
+
+        for (let i = 1; i <= numSpheres; i++) {
+          const radius = (i * 35 + (t * speed)) % (w - originX + 50);
+          const intensity = Math.max(0.15, 1 / (1 + (radius / 70)));
+
+          ctxDim.beginPath();
+          ctxDim.strokeStyle = `rgba(217, 119, 6, ${intensity})`;
+          ctxDim.lineWidth = 3.5;
+          ctxDim.arc(originX, centerY, radius, -Math.PI / 3, Math.PI / 3);
+          ctxDim.stroke();
+        }
+
+        // Interfase tisular
+        const tissueX = w - 140;
+        ctxDim.fillStyle = 'rgba(2, 132, 199, 0.15)';
+        ctxDim.fillRect(tissueX, centerY - 90, 80, 180);
+        ctxDim.strokeStyle = '#0284c7';
+        ctxDim.strokeRect(tissueX, centerY - 90, 80, 180);
+
+        ctxDim.fillStyle = '#0f172a';
+        ctxDim.font = 'bold 11px Outfit, sans-serif';
+        ctxDim.fillText('Interfase Tisular', tissueX + 6, centerY - 10);
+        ctxDim.font = '10px Outfit, sans-serif';
+        ctxDim.fillStyle = '#64748b';
+        ctxDim.fillText('Z₁ ≠ Z₂ (Eco)', tissueX + 6, centerY + 8);
+      }
+    }
+
+    /* =========================================================================
+       8. LOOP DE ANIMACIÓN MAESTRO (60 FPS)
+       ========================================================================= */
+    function animate(timestamp) {
+      if (!state.lastTimestamp) state.lastTimestamp = timestamp;
+      const dt = (timestamp - state.lastTimestamp) / 1000;
+      state.lastTimestamp = timestamp;
+
+      if (state.isRunning) {
+        const speedFactor = state.slowMo ? 0.25 : 1.0;
+        state.simTime += dt * speedFactor;
+      }
+
+      renderMainLab();
+      renderDualityCanvases();
+      renderDimensionCanvas();
+
+      requestAnimationFrame(animate);
+    }
+
+    /* =========================================================================
+       9. KATEX AUTO-RENDER
+       ========================================================================= */
+    function renderMathWhenReady() {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          ignoredClasses: ['no-math']
+        });
+      }
+    }
+
+    /* Inicialización al Cargar */
+    window.onload = function () {
+      resizeAllCanvases();
+      updateCalculations();
+      renderMathWhenReady();
+      requestAnimationFrame(animate);
+    };
+  </script>
+</body>
+</html>
